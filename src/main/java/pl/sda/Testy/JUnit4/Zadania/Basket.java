@@ -34,16 +34,13 @@ public class Basket {
             return orderedItems;
     }
 
-    public Map<Item, Integer> removeItem(Basket basket, Item item, Integer quantity) {
-        Map<Item, Integer> orderedItems = basket.getOrderedItems();
+    public Map<Item, Integer> removeItem(Item item) {
         if (orderedItems.isEmpty()) throw new IllegalArgumentException("Basket is empty!");
-        if (quantity <= 0) throw new IllegalArgumentException("Quantity has to be 1 or above!");
-        orderedItems.remove(item, 1);
+        removeItems(item, 1);
         return orderedItems;
     }
 
-    public Map<Item, Integer> removeItems(Basket basket, Item item, Integer quantity) {
-        Map<Item, Integer> orderedItems = basket.getOrderedItems();
+    public Map<Item, Integer> removeItems(Item item, Integer quantity) {
         if (orderedItems.isEmpty()) throw new IllegalArgumentException("Basket is empty!");
         if (quantity <= 0) throw new IllegalArgumentException("Quantity has to be 1 or above!");
         quantity = orderedItems.get(item) - quantity;
@@ -57,7 +54,7 @@ public class Basket {
         return orderedItems;
     }
 
-    public double getBasketValue(Basket basket) {
+    public double getBasketValue() {
 
         double orderValue = 0;
 
@@ -86,7 +83,7 @@ public class Basket {
             result.append(System.lineSeparator());
         }
 
-        result.append(String.format("Total: %.2f", getBasketValue(this)));
+        result.append(String.format("Total: %.2f", getBasketValue()));
         return result.toString();
     }
 }

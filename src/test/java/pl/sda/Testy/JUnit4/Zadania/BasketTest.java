@@ -15,6 +15,8 @@ public class BasketTest {
     private Basket basket;
     private Item item;
 
+    private static final double PRICE_DELTA = 0.001;
+
     @Before
     public void setUp() {
         item = new Item("przedmiot", 39.99);
@@ -70,15 +72,44 @@ public class BasketTest {
     }
 
     @Test
-    public void shouldAllowToRemoveItem() {
+    public void shouldAllowToRemoveItems() {
+        basket.addItem(item, 3);
+        basket.removeItems(item, 2);
+
+        Map<Item, Integer> expected = createOrder(item, 1);
+
+        assertEquals(expected, basket.getOrderedItems());
     }
 
     @Test
-    public void removeItems() {
+    public void shouldAllowToRemoveItem() {
+        basket.addItem(item, 3);
+        basket.removeItem(item);
+
+        Map<Item, Integer> expected = createOrder(item, 2);
+
+        assertEquals(expected, basket.getOrderedItems());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldntAllowToRemoveNegativeQuantityOfItems() {
+        basket.addItem(item, 3);
+        basket.removeItems(item, -3);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldntAllowToRemove0Items() {
+        basket.addItem(item, 3);
+        basket.removeItems(item, 0);
     }
 
     @Test
     public void getBasketValue() {
+        Item teddyBear = new Item("Teddy Bear", 19.99);
+        basket.addItem(teddyBear, 3);
+
+        double expectedValue = teddyBear.getPrice()*3;
+        assertEquals(expectedValue, basket.getBasketValue(), PRICE_DELTA);
     }
 
     private Map<Item, Integer> createOrder(Object... mapContent) {
